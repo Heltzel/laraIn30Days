@@ -2,5 +2,5 @@
     <x-slot:heading>
         Home
     </x-slot:heading>
-    hi from home
+    Hello from Home Page
 </x-layout>
