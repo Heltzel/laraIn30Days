@@ -22,3 +22,34 @@ Route::get('/jobs/{id}', function ($id) {
 Route::get('/contact', function () {
     return view('contact');
 });
+
+//==========================================================
+Route::get('/userroles-attach', function () {
+    $user = \App\Models\User::first();
+    $roles = \App\Models\Role::all();
+
+    $user->roles()->attach($roles);
+    return "Attachet";
+});
+
+Route::get('/userroles-attach-by-id', function () {
+    $user = \App\Models\User::first();
+
+    $user->roles()->sync([1, 3, 5]);
+
+    return "Attachet by Id and synced";
+});
+Route::get('/userroles-sync-no-detach', function () {
+    $user = \App\Models\User::first();
+
+    $user->roles()->syncWithoutDetaching([2]);
+
+    return "Attachet by Id and synced";
+});
+Route::get('/userroles-detach', function () {
+    $user = \App\Models\User::first();
+    $roles = \App\Models\Role::find(2);
+
+    $user->roles()->detach($roles);
+    return "Detachet";
+});
