@@ -46,6 +46,21 @@ Route::get('/userroles-sync-no-detach', function () {
 
     return "Attachet by Id and synced";
 });
+//-----------get Pivot data ----------------------------
+
+Route::get('/userroles-pivotdata', function () {
+    $user = \App\Models\User::first();
+
+    $user->roles()->sync([
+        1 => [
+            'name' => 'Victor'
+        ]
+    ]);
+
+    return $user->roles->first()->pivot->name;
+});
+
+
 Route::get('/userroles-detach', function () {
     $user = \App\Models\User::first();
     $roles = \App\Models\Role::find(2);
