@@ -10,9 +10,9 @@ use function PHPUnit\Framework\returnSelf;
 Route::get('/', function () {
     return view('home');
 });
-// N+1 fix
+// N+1 fix : set lazy loading to eager loading
 Route::get('/jobs', function () {
-    $jobs = Job::with('employer')->get();
+    $jobs = Job::with('employer')->paginate(3);
     return view('jobs', [
         'jobs' => $jobs,
     ]);
