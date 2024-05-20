@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Job;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Tag extends Model
 {
     use HasFactory;
-
     protected $fillable = ['name'];
 
     public function jobs()
     {
-        return $this->belongsToMany(Job::class, foreignPivotKey: 'job_listing_id');
+        return $this->belongsToMany(Job::class, relatedPivotKey: 'job_listing_id')->withTimestamps();
     }
 }
