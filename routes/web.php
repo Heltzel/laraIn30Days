@@ -13,13 +13,32 @@ Route::get('/', function () {
 // N+1 fix : set lazy loading to eager loading
 Route::get('/jobs', function () {
     $jobs = Job::with('employer')->paginate(3);
-    return view('jobs', [
+    return view('jobs.index', [
         'jobs' => $jobs,
     ]);
+})->name("jobs.index");
+
+Route::get('/jobs/create', function () {
+    return view('jobs.create');
 });
+
+Route::post('/jobs', function () {
+    request()->validate([
+        'title' => ['required', 'min:3'],
+        'salary' => ['required'],
+    ]);
+
+    Job::create([
+        'title' => request('title'),
+        'salary' => request('salary'),
+        'employer_id' => 1,
+    ]);
+    return redirect()->route('jobs.index');
+});
+
 Route::get('/jobs/{id}', function ($id) {
     $job = Job::find($id);
-    return view('show', ['job' => $job]);
+    return view('jobs.show', ['job' => $job]);
 });
 Route::get('/contact', function () {
     return view('contact');
