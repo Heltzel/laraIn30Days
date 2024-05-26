@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\JobsController;
 use App\Models\Job;
 use Illuminate\Support\Arr;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use function PHPUnit\Framework\returnSelf;
 
@@ -10,36 +12,24 @@ use function PHPUnit\Framework\returnSelf;
 Route::get('/', function () {
     return view('home');
 });
+//show
+// Route::get('posts/{post:slug}')
+// slug refers to the column named slug in db 
+
 // N+1 fix : set lazy loading to eager loading
-Route::get('/jobs', function () {
-    $jobs = Job::with('employer')->paginate(3);
-    return view('jobs.index', [
-        'jobs' => $jobs,
-    ]);
-})->name("jobs.index");
+Route::controller(JobsController::class)->group(function () {
+    Route::get('/jobs', 'index')->name("jobs.index");
+    Route::get('/jobs/create', 'create')->name("jobs.create");
+    Route::post('/jobs', 'store')->name("jobs.store");
 
-Route::get('/jobs/create', function () {
-    return view('jobs.create');
+    Route::get('/jobs/{job}', 'show')->name("jobs.show");
+    Route::get('/jobs/{job}/edit', 'edit')->name("jobs.edit");
+    Route::patch('/jobs/{job}',  'update')->name("jobs.update");
+    Route::delete('/jobs/{job}',  'destroy')->name("jobs.destroy");
 });
 
-Route::post('/jobs', function () {
-    request()->validate([
-        'title' => ['required', 'min:3'],
-        'salary' => ['required'],
-    ]);
 
-    Job::create([
-        'title' => request('title'),
-        'salary' => request('salary'),
-        'employer_id' => 1,
-    ]);
-    return redirect()->route('jobs.index');
-});
-
-Route::get('/jobs/{id}', function ($id) {
-    $job = Job::find($id);
-    return view('jobs.show', ['job' => $job]);
-});
+//==========================================================
 Route::get('/contact', function () {
     return view('contact');
 });
