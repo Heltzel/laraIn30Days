@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Job;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class JobsController extends Controller
 {
@@ -51,7 +54,24 @@ class JobsController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Job $job)
-    {
+    {  //Moved to AppServiceProvider to make it more available
+        // Gate::define('edit-job', function (User $user, Job $job) {
+        //     return $job->employer->user->is($user);
+        // });
+
+        //By moving the Gate, test for guest is irralevant
+        // if (Auth::guest()) {
+        //     return redirect()->route('session.create');
+        // }
+
+        // if ($job->employer->user->isNot(Auth::user())) {
+        //     abort(403);
+        // }
+
+        //===================================
+
+        // Gate::authorize('edit-job', $job);
+        // Gate protection is set in routes file and AppServiceProviider
         return view('jobs.edit', compact('job'));
     }
 
