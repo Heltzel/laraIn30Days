@@ -43,7 +43,8 @@ class JobsController extends Controller
         $request->merge(['employer_id' => 1]);
         $job = Job::create($request->all());
 
-        Mail::to($job->employer->user)->send(new JobPosted($job));
+        Mail::to($job->employer->user)->queue(new JobPosted($job));
+
         return redirect()->route('jobs.index');
     }
 
