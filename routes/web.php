@@ -6,6 +6,7 @@ use App\Http\Controllers\testsCongroller;
 use App\Http\Controllers\RegisteredUsersController;
 use App\Http\Controllers\SessionsController;
 
+
 Route::view('/', 'home');
 Route::view('/contact', 'contact');
 // Route::resource('jobs', JobsController::class)->only('index','show')->middleware('auth');

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Job;
+use App\Mail\JobPosted;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 
 class JobsController extends Controller
 {
@@ -38,7 +41,9 @@ class JobsController extends Controller
             'salary' => ['required'],
         ]);
         $request->merge(['employer_id' => 1]);
-        Job::create($request->all());
+        $job = Job::create($request->all());
+
+        Mail::to($job->employer->user)->send(new JobPosted($job));
         return redirect()->route('jobs.index');
     }
 
