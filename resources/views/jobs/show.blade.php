@@ -7,7 +7,10 @@
         This job pays {{ $job['salary'] }} per year.
     </p>
     <div class="flex gap-6">
-
+        {{-- Gate guard use Gate name (edit-job )
+             @can('edit-job', $job) 
+              --}}
+        {{-- Polycy guard use policy name (edit) --}}
         @can('edit', $job)
             <x-button href="/jobs/{{ $job->id }}/edit">Edit Job</x-button>
             <form method="POST" action="/jobs/{{ $job->id }}">
